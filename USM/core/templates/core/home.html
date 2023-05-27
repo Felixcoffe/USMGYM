@@ -1,12 +1,262 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
+{%load static%}
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Gimnasio maquinas</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link href="css/estilo.css" rel="stylesheet" type="text/css">
+    <link href="css/estilo_boton.css" rel="stylesheet" type="text/css">
+    <script src="js/fecha.js"></script>
+    <script src="js/valida_login.js"></script>
+    <script src="js/centrar.js"></script>
+    <script language="JavaScript">
+
+        function noenter() {
+            return !(window.event && window.event.keyCode == 13);
+        }
+
+        function enter(e, t) {
+            if (window.event) {
+                if (window.event.keyCode == 13) {
+                    if (t == 1) document.Formulario.passwd.focus();
+                    else ValidaLogin(document.Formulario);
+                }
+            }
+            else {
+                if (e.which == 13) {
+                    if (t == 1) document.Formulario.passwd.focus();
+                    else ValidaLogin(document.Formulario);
+                }
+            }
+        }
+        function ValidaLogin(f) {
+
+            if (f.login.value.length == 0) {
+                alert("Ingrese su nombre de usuario.\nEjemplo: nombre.apellido");
+                f.login.focus();
+                return;
+            }
+            if (f.passwd.value.length == 0) {
+                alert("Ingrese su clave de su cuenta e-mail USM.");
+                f.passwd.focus();
+                return;
+            }
+            f.submit();
+            return;
+        }
+
+        function Aviso() {
+            var par = 'toolbar=no,status=no,menubar=no,scrollbars=auto,resizable=yes';
+            var w = Centrar02("gim_pop_up.html", "aviso", 250, 550, par);
+            w.focus();
+        }
+        function ProblemaClave() {
+            var par = 'toolbar=no,status=no,menubar=no,scrollbars=auto,resizable=yes';
+            var w = Centrar02("problema_clave.html", "problema", 300, 600, par);
+            w.focus();
+        }
+        var TheBrowserName = navigator.appName;
+        var TheBrowserVersion = parseFloat(navigator.appVersion);
+
+        function CursorOn(t) {
+            if ((TheBrowserName == 'Netscape') && (TheBrowserVersion >= 5)) {
+                t.style.cursor = "pointer";
+            } else {
+                t.style.cursor = "hand";
+            }
+        }
+        function CursorOff(t) {
+            t.style.cursor = "default";
+        }
+    </script>
+    <style type="text/css">
+        <!--
+        .Estilo1 {
+            color: #FF0000
+        }
+
+        body {
+            background-color: #E7E7E7;
+        }
+
+        .Cgris {
+            font-family: Tahoma, Helvetica, sans-serif;
+            font-size: 11px;
+        }
+        -->
+    </style>
 </head>
-<body>
-    
+
+<body onload="populate();document.Formulario.login.focus(); fecha();hora();" cz-shortcut-listen="true">
+    <table width="788" height="570" cellspacing="0" cellpadding="1" border="0" bgcolor="#219B8F" align="center">
+        <tbody>
+            <tr>
+                <td valign="middle">
+                    <table width="100%" height="145" cellspacing="0" cellpadding="0" border="0" bgcolor="#FFFFFF"
+                        align="center">
+                        <tbody>
+                            <tr>
+                                <td valign="top" height="145" align="center"><img name="logo"
+                                        src="{% static 'core/img/gimheader.jpg' %}" alt="" height="145" border="0"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table width="100%" height="374" cellspacing="0" cellpadding="0" border="0" bgcolor="#FFFFFF"
+                        align="center">
+                        <tbody>
+                            <tr valign="top">
+                                <td colspan="3" align="center">
+                                    <table width="100%" cellspacing="3" cellpadding="0" border="0" align="center">
+                                        <tbody>
+                                            <tr>
+                                                <td width="47%" valign="top">
+                                                    <table width="92%" cellspacing="5" cellpadding="3" border="0">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td colspan="2" height="35"><span
+                                                                        class="Estilo_NaranjoOsc">Gimnasio de Máquinas y
+                                                                        Sala Multiuso</span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td rowspan="3" width="79%" valign="top">
+                                                                    <font class="letra8" color="#003366"><b>Descripción
+                                                                            general </b></font>
+                                                                    <p align="justify">
+                                                                        <font class="letra8">El gimnasio de maquinas es
+                                                                            un recinto deportivo que ofrece una
+                                                                            sala de musculaciónpara que sean utilizadas
+                                                                            con actividades orientadas al fitness, y que
+                                                                            tiene como fin principal fomentar la
+                                                                            práctica de actividad física y así
+                                                                            contribuir a la
+                                                                            competencia transversal sello Vida
+                                                                            Saludable.</font>
+                                                                    </p>
+                                                                    <font class="letra8" color="#003366"><b>Horario de
+                                                                            atención</b></font>
+                                                                    <p align="justify">
+                                                                        <font class="letra8"> Lunes a viernes de 08:15 a
+                                                                            21:00 hrs.<br>
+                                                                            Sábado de 08:15 a 13:25 hrs.</font>
+
+                                                                    </p>
+                                                                    <font class="letra8" color="#003366">
+                                                                        <b>Ubicación</b></font>
+                                                                    <p align="justify">
+                                                                        <font class="letra8"> Segundo piso edificio
+                                                                            --.<br>
+                                                                        </font>
+                                                                    </p>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                                <form action="gim_validar.jsp" method="POST" name="Formulario"
+                                                    target="_self" autocomplete="off"></form>
+
+                                                <td width="27%" valign="top">
+                                                    <table width="100%" cellspacing="1" cellpadding="1" border="0"
+                                                        align="right">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td colspan="2">&nbsp;</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="2">
+                                                                    <font class="letra8" color="#003366"><b>Acceso</b>
+                                                                    </font>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="2" class="CGris" height="35">Ingrese su
+                                                                    cuenta de usuario y clave de correo USM.</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <font class="CGris" color="#003366">Usuario</font>
+                                                                </td>
+                                                                <td><input name="login" type="text" size="15"
+                                                                        maxlength="30" class="CGris"
+                                                                        onkeypress="enter(event,1)">
+                                                                    <select name="server" class="CGris">
+                                                                        <option value="usm.cl" selected="">@usm.cl
+                                                                        </option>
+                                                                        <option value="alumnos.usm.cl">@alumnos.usm.cl
+                                                                        </option>
+                                                                        <option value="sansano.usm.cl">@sansano.usm.cl
+                                                                        </option>
+                                                                        <option value="postgrado.usm.cl">
+                                                                            @postgrado.usm.cl</option>
+                                                                    </select>
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td nowrap="">
+                                                                    <font class="CGris" color="#003366">Clave</font>
+                                                                </td>
+                                                                <td><input type="password" class="CGris" size="15"
+                                                                        name="passwd" onkeypress="enter(event,2)">
+                                                                    <input type="button" name="ingresar"
+                                                                        value="Ingresar" class="boton04"
+                                                                        onclick="ValidaLogin(document.Formulario)">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>&nbsp;</td>
+                                                                <td>
+                                                                    <font
+                                                                        onmouseover="JavaScript:CursorOn(this); window.status='¿problemas con su contraseña?'; this.style.color='#CA6B0F'; return true; "
+                                                                        onmouseout="JavaScript:CursorOff(this); this.style.color='#996600'; window.status=''; return true; "
+                                                                        onclick="JavaScript:ProblemaClave();"
+                                                                        class="Cgris" color="#996600">
+                                                                        ¿problemas con su clave?</font>
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td>&nbsp;</td>
+                                                                <td>
+                                                                    <font class="CGris" color="red">Usuario / Clave
+                                                                        inválidos</font>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="2">
+
+
+
+                                                        </tbody>
+                                                    </table>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" height="1" align="center">&nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table width="100%" height="30" cellspacing="0" cellpadding="0" border="0">
+                        <tbody>
+                            <tr>
+                                <td class="Estilo_AzulinoClaro letra8" height="40" align="center">
+                                    © USM</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div style="padding:30px; text-align:center;">
+        <font style="color:white;">
+            h.56 - Actualizado el 19-04-2023</font>
+    </div>
 </body>
+
 </html>
