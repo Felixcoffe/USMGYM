@@ -1,0 +1,136 @@
+<html>
+{%load static%}
+<head>
+    <title>{% block title %} {% endblock %}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link href="css/estilo.css" rel="stylesheet" type="text/css">
+    <link href="css/estilo_boton.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{%static 'core/css/CssGYM.css'}">
+    <script src="js/fecha.js"></script>
+    <script src="js/valida_login.js"></script>
+    <script src="js/centrar.js"></script>
+    <script language="JavaScript">
+
+        function noenter() {
+            return !(window.event && window.event.keyCode == 13);
+        }
+
+        function enter(e, t) {
+            if (window.event) {
+                if (window.event.keyCode == 13) {
+                    if (t == 1) document.Formulario.passwd.focus();
+                    else ValidaLogin(document.Formulario);
+                }
+            }
+            else {
+                if (e.which == 13) {
+                    if (t == 1) document.Formulario.passwd.focus();
+                    else ValidaLogin(document.Formulario);
+                }
+            }
+        }
+        function ValidaLogin(f) {
+
+            if (f.login.value.length == 0) {
+                alert("Ingrese su nombre de usuario.\nEjemplo: nombre.apellido");
+                f.login.focus();
+                return;
+            }
+            if (f.passwd.value.length == 0) {
+                alert("Ingrese su clave de su cuenta e-mail USM.");
+                f.passwd.focus();
+                return;
+            }
+            f.submit();
+            return;
+        }
+
+        function Aviso() {
+            var par = 'toolbar=no,status=no,menubar=no,scrollbars=auto,resizable=yes';
+            var w = Centrar02("gim_pop_up.html", "aviso", 250, 550, par);
+            w.focus();
+        }
+        function ProblemaClave() {
+            var par = 'toolbar=no,status=no,menubar=no,scrollbars=auto,resizable=yes';
+            var w = Centrar02("problema_clave.html", "problema", 300, 600, par);
+            w.focus();
+        }
+        var TheBrowserName = navigator.appName;
+        var TheBrowserVersion = parseFloat(navigator.appVersion);
+
+        function CursorOn(t) {
+            if ((TheBrowserName == 'Netscape') && (TheBrowserVersion >= 5)) {
+                t.style.cursor = "pointer";
+            } else {
+                t.style.cursor = "hand";
+            }
+        }
+        function CursorOff(t) {
+            t.style.cursor = "default";
+        }
+    </script>
+
+</head>
+
+<body onload="populate();document.Formulario.login.focus(); fecha();hora();" cz-shortcut-listen="true">
+    <table width="788" height="570" cellspacing="0" cellpadding="1" border="0" bgcolor="#219B8F" align="center">
+        <tbody>
+            <tr>
+                <td valign="middle">
+                    <table width="100%" height="145" cellspacing="0" cellpadding="0" border="0" bgcolor="#FFFFFF"
+                        align="center">
+                        <tbody>
+                            <tr>
+                                <td valign="top" height="145" align="center"><img name="logo"
+                                        src="{% static 'core/img/gimheader.jpg' %}" alt="" height="145" border="0"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table width="100%" height="374" cellspacing="0" cellpadding="0" border="0" bgcolor="#FFFFFF"
+                        >
+                        <tbody>
+                            <tr valign="top">
+                                <td colspan="3">
+                                    <table width="100%" cellspacing="3" cellpadding="0" border="0" >
+                                        <tbody>
+                                            <tr>
+                                                <td width="47%" valign="top">
+                                                    <table width="92%" cellspacing="5" cellpadding="3" border="0">
+                                                        <tbody>
+                                                            {%block content%}
+                                                            {%endblock%}
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                                
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" height="1" ">&nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table width="100%" height="30" cellspacing="0" cellpadding="0" border="0">
+                        <tbody>
+                            <tr>
+                                <td class="Estilo_AzulinoClaro letra8" height="40" align="center">
+                                    © USM</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div style="padding:30px; text-align:center;">
+        <font style="color:white;">
+            h.56 - Actualizado el 19-04-2023</font>
+    </div>
+</body>
+
+
+</html>

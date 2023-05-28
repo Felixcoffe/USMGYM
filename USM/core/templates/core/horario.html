@@ -1,0 +1,94 @@
+{%extends 'core/base.html'%}
+{%load static%}
+
+{%block content%}
+
+<head>
+    <style>
+        .body{
+            background-color: #ffffff;
+            align-items: center;
+        }
+        .horario {
+            display: grid;
+            grid-template-columns: 1fr repeat(7, 1fr);
+            /* 1 columna para el día actual, 5 columnas para lunes a viernes */
+            grid-template-rows: repeat(10, 1fr);
+            /* 10 filas para los encabezados de días y horas de disponibilidad */
+            grid-gap: 1px;
+            /* Espacio entre las celdas */
+            background-color: #f2f2f2;
+            /* Color de fondo de la cuadrícula */
+            padding: 10px;
+            /* Espacio interno del div */
+        }
+
+        .horario>div {
+            background-color: #ffffff;
+            /* Color de fondo de cada celda */
+            padding: 5px;
+            /* Espacio interno de cada celda */
+            text-align: center;
+            /* Centrar el contenido en cada celda */
+        }
+
+        .hora {
+            grid-column: 1;
+            /* Las horas ocupan la primera columna */
+        }
+    </style>
+</head>
+
+
+<body class="body">
+    <table>
+        <h2>Bienvenido :D</h2>
+        <h3 id="fecha"></h3>
+
+        <script>
+            // Obtener el elemento h1 por su ID
+            var fechaElemento = document.getElementById("fecha");
+
+            // Obtener la fecha actual
+            var fechaActual = new Date();
+
+            // Obtener el día, mes y año de la fecha actual
+            var dia = fechaActual.getDate();
+            var mes = fechaActual.toLocaleString('default', { month: 'long' });
+            var anio = fechaActual.getFullYear();
+
+            // Construir la cadena de fecha en el formato deseado
+            var fechaFormateada = "Fecha actual: " + dia + " de " + mes + " de " + anio;
+
+            // Actualizar el contenido del elemento h1 con la fecha
+            fechaElemento.textContent = fechaFormateada;
+        </script>
+        <h4>Horarios</h4>
+    </table>
+    <div class="horario">
+        <!-- Encabezados de los días -->
+        <div></div>
+        <script>
+            var diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+            var diaActual = new Date().getDay();
+            for (var i = diaActual; i <= 6 + diaActual; i++) {
+                var diaIndex = i % 7;
+                document.write('<div>' + diasSemana[diaIndex] + '</div>');
+            }
+        </script>
+
+        <!-- Horas de disponibilidad -->
+        <div class="hora">9:00 AM</div>
+        <div class="hora">10:00 AM</div>
+        <div class="hora">11:00 AM</div>
+        <div class="hora">12:00 PM</div>
+        <div class="hora">1:00 PM</div>
+        <div class="hora">2:00 PM</div>
+        <div class="hora">3:00 PM</div>
+        <div class="hora">4:00 PM</div>
+        <div class="hora">5:00 PM</div>
+    </div>
+    </div>
+</body>
+
+{%endblock%}
