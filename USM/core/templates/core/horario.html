@@ -1,14 +1,15 @@
-{%extends 'core/base.html'%}
-{%load static%}
+{% extends 'core/base.html' %}
+{% load static %}
 
-{%block content%}
+{% block content %}
 
 <head>
     <style>
-        .body{
+        .body {
             background-color: #ffffff;
             align-items: center;
         }
+
         .horario {
             display: grid;
             grid-template-columns: 1fr repeat(7, 1fr);
@@ -36,9 +37,29 @@
             grid-column: 1;
             /* Las horas ocupan la primera columna */
         }
+
+        .ocupado button {
+            background-color: red;
+            /* Color de fondo para no disponibilidad */
+            color: white;
+            /* Color de texto para no disponibilidad */
+        }
+
+        .ocupado-cupos button {
+            background-color: yellow;
+            /* Color de fondo para cupos limitados */
+            color: black;
+            /* Color de texto para cupos limitados */
+        }
+
+        .disponible button {
+            background-color: green;
+            /* Color de fondo para disponibilidad */
+            color: white;
+            /* Color de texto para disponibilidad */
+        }
     </style>
 </head>
-
 
 <body class="body">
     <table>
@@ -78,17 +99,32 @@
         </script>
 
         <!-- Horas de disponibilidad -->
-        <div class="hora">9:00 AM</div>
-        <div class="hora">10:00 AM</div>
-        <div class="hora">11:00 AM</div>
-        <div class="hora">12:00 PM</div>
-        <div class="hora">1:00 PM</div>
-        <div class="hora">2:00 PM</div>
-        <div class="hora">3:00 PM</div>
-        <div class="hora">4:00 PM</div>
-        <div class="hora">5:00 PM</div>
+        <div class="horario">
+            <!-- Encabezados de los días -->
+            <div></div>
+            {% for dia in horarios %}
+            <div class="hora">{{ dia.hora_inicio|time:"H:i" }} - {{ dia.hora_final|time:"H:i" }}</div>
+            {% for cupo in dia.cupos_set.all %}
+            {% if cupo.cupos_disponibles == 0 %}
+            <div class="ocupado">
+                <button>No disponible</button>
+            </div>
+            {% elif cupo.cupos_disponibles < dia.bloques_totales %} <div class="ocupado-cupos">
+                <button>Ocupado ({{ cupo.cupos_disponibles }})</button>
+        </div>
+        {% else %}
+        <div class="disponible">
+            <button>Disponible ({{ cupo.cupos_disponibles }})</button>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
     </div>
-    </div>
+
+
+
+
 </body>
+
 
 {%endblock%}
