@@ -3,128 +3,69 @@
 
 {% block content %}
 
+<!DOCTYPE html>
+<html>
+
 <head>
     <style>
-        .body {
-            background-color: #ffffff;
-            align-items: center;
-        }
-
         .horario {
             display: grid;
-            grid-template-columns: 1fr repeat(7, 1fr);
-            /* 1 columna para el día actual, 5 columnas para lunes a viernes */
-            grid-template-rows: repeat(10, 1fr);
-            /* 10 filas para los encabezados de días y horas de disponibilidad */
-            grid-gap: 1px;
-            /* Espacio entre las celdas */
-            background-color: #f2f2f2;
-            /* Color de fondo de la cuadrícula */
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(11, 1fr);
+            grid-gap: 5px;
             padding: 10px;
-            /* Espacio interno del div */
         }
 
-        .horario>div {
-            background-color: #ffffff;
-            /* Color de fondo de cada celda */
-            padding: 5px;
-            /* Espacio interno de cada celda */
+        .horario div {
+            background-color: #f2f2f2;
+            padding: 10px;
             text-align: center;
-            /* Centrar el contenido en cada celda */
         }
 
-        .hora {
-            grid-column: 1;
-            /* Las horas ocupan la primera columna */
-        }
-
-        .ocupado button {
-            background-color: red;
-            /* Color de fondo para no disponibilidad */
-            color: white;
-            /* Color de texto para no disponibilidad */
-        }
-
-        .ocupado-cupos button {
-            background-color: yellow;
-            /* Color de fondo para cupos limitados */
-            color: black;
-            /* Color de texto para cupos limitados */
-        }
-
-        .disponible button {
-            background-color: green;
-            /* Color de fondo para disponibilidad */
-            color: white;
-            /* Color de texto para disponibilidad */
+        .horario button {
+            padding: 5px;
         }
     </style>
 </head>
 
-<body class="body">
+<body>
+    <h1>Horario</h1>
+    <h2>{{ dia_actual }}</h2>
+
     <table>
-        <h2>Bienvenido :D</h2>
-        <h3 id="fecha"></h3>
-
-        <script>
-            // Obtener el elemento h1 por su ID
-            var fechaElemento = document.getElementById("fecha");
-
-            // Obtener la fecha actual
-            var fechaActual = new Date();
-
-            // Obtener el día, mes y año de la fecha actual
-            var dia = fechaActual.getDate();
-            var mes = fechaActual.toLocaleString('default', { month: 'long' });
-            var anio = fechaActual.getFullYear();
-
-            // Construir la cadena de fecha en el formato deseado
-            var fechaFormateada = "Fecha actual: " + dia + " de " + mes + " de " + anio;
-
-            // Actualizar el contenido del elemento h1 con la fecha
-            fechaElemento.textContent = fechaFormateada;
-        </script>
-        <h4>Horarios</h4>
+        <thead>
+            <tr>
+                <th></th>
+                {% for dia in dias %}
+                <th>{{ dia }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for hora in horas %}
+            <tr>
+                <td>Hr {{ hora }}</td>
+                {% for dia in dias %}
+                    <td>
+                        {% if dia != 'Sábado' and dia != 'Domingo' %}
+                            {% for horario in horarios %}
+                                {% if horario.fecha.weekday == forloop.counter0 and horario.bloques_disponibles > 0 %}
+                                    <div>
+                                        <button>{{ horario.bloques_disponibles }} / {{ horario.bloques_totales }}</button>
+                                    </div>
+                                {% else %}
+                                    <div></div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
-    <div class="horario">
-        <!-- Encabezados de los días -->
-        <div></div>
-        <script>
-            var diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-            var diaActual = new Date().getDay();
-            for (var i = diaActual; i <= 6 + diaActual; i++) {
-                var diaIndex = i % 7;
-                document.write('<div>' + diasSemana[diaIndex] + '</div>');
-            }
-        </script>
-
-        <!-- Horas de disponibilidad -->
-        <div class="horario">
-            <!-- Encabezados de los días -->
-            <div></div>
-            {% for dia in horarios %}
-            <div class="hora">{{ dia.hora_inicio|time:"H:i" }} - {{ dia.hora_final|time:"H:i" }}</div>
-            {% for cupo in dia.cupos_set.all %}
-            {% if cupo.cupos_disponibles == 0 %}
-            <div class="ocupado">
-                <button>No disponible</button>
-            </div>
-            {% elif cupo.cupos_disponibles < dia.bloques_totales %} <div class="ocupado-cupos">
-                <button>Ocupado ({{ cupo.cupos_disponibles }})</button>
-        </div>
-        {% else %}
-        <div class="disponible">
-            <button>Disponible ({{ cupo.cupos_disponibles }})</button>
-        </div>
-        {% endif %}
-        {% endfor %}
-        {% endfor %}
-    </div>
-
-
-
-
 </body>
 
+</html>
 
-{%endblock%}
+{% endblock %}

@@ -1,9 +1,10 @@
-from django.core.management.base import BaseCommand
+import uuid
 from datetime import datetime, timedelta
-from core.models import Horario, Cupos
+from django.core.management.base import BaseCommand
+from core.models import Horario
 
 class Command(BaseCommand):
-    help = 'Genera automáticamente registros de Horario y Cupos'
+    help = 'Genera automáticamente registros de Horario'
 
     def handle(self, *args, **options):
         # Obtener la fecha actual
@@ -12,35 +13,37 @@ class Command(BaseCommand):
         # Obtener el próximo día lunes
         dia_lunes = fecha_actual + timedelta(days=(7 - fecha_actual.weekday()))
 
-        # Generar registros de Horario y Cupos para los próximos 7 días, omitiendo los domingos
+        # Generar registros de Horario para los próximos 7 días, omitiendo los domingos y sábados
         for i in range(7):
             fecha = dia_lunes + timedelta(days=i)
 
-            # Omitir los registros para los domingos
-            if fecha.weekday() == 6:
+            # Omitir los registros para los domingos y sábados
+            if fecha.weekday() in [6, 5]:
                 continue
 
-            # Generar registros de Horario para cada hora desde las 8 am hasta las 5 pm
-            for hora in range(8, 17):
+            # Generar registros de Horario para cada hora desde las 8 am hasta las 7 pm
+            for hora in range(8, 20):
                 hora_inicio = datetime(fecha.year, fecha.month, fecha.day, hora, 0)
-                hora_final = hora_inicio + timedelta(hours=1)
+                hora_final = hora_inicio + timedelta(minutes=70)
+
+                # Crear un ID único para el horario
+                id_horario = uuid.uuid4()
+
+                # Calcular la cantidad de bloques
+                minutos_totales = (hora_final - hora_inicio).total_seconds() // 60
+                bloques_totales = 20
+                bloques_disponibles = bloques_totales
 
                 # Crear un registro de Horario
-                horario = Horario.objects.create(
+                horario = Horario(
+                    id_horario=id_horario,
                     fecha=fecha,
                     hora_inicio=hora_inicio.time(),
                     hora_final=hora_final.time(),
                     estado=True,
-                    bloques_totales=8  # Actualizar el número de cupos a 8
+                    bloques_totales=bloques_totales,
+                    bloques_disponibles=bloques_disponibles
                 )
-
-                # Generar los 8 cupos para el horario actual
-                for cupo in range(8):
-                    Cupos.objects.create(
-                        id_horario=horario,
-                        hora=hora_inicio.time(),
-                        cupos_disponibles=1,
-                        estado=True
-                    )
+                horario.save()
 
         self.stdout.write(self.style.SUCCESS('Base de datos poblada exitosamente'))
