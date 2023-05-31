@@ -14,6 +14,7 @@
             grid-template-rows: repeat(11, 1fr);
             grid-gap: 5px;
             padding: 10px;
+            margin: 0 auto; /* Centrar la tabla */
         }
 
         .horario div {
@@ -23,7 +24,25 @@
         }
 
         .horario button {
-            padding: 5px;
+            padding: 10px; /* Aumentar el tamaño de los botones */
+            font-size: 16px; /* Aumentar el tamaño de la fuente de los botones */
+            transition: background-color 0.3s; /* Transición suave para el cambio de color */
+        }
+
+        .disponibles {
+            background-color: rgb(122, 228, 122); /* Color verde para bloques disponibles */
+        }
+
+        .no-disponibles {
+            background-color: rgb(241, 98, 98); /* Color rojo para bloques no disponibles */
+        }
+
+        .parcialmente-disponibles {
+            background-color: rgb(244, 198, 82); /* Color amarillo para bloques parcialmente disponibles */
+        }
+
+        .horario button:hover {
+            background-color: #ccc; /* Color del botón al pasar el mouse encima */
         }
     </style>
 </head>
@@ -49,10 +68,20 @@
                     <td>
                         {% if dia != 'Sábado' and dia != 'Domingo' %}
                             {% for horario in horarios %}
-                                {% if horario.fecha.weekday == forloop.counter0 and horario.bloques_disponibles > 0 %}
-                                    <div>
-                                        <button>{{ horario.bloques_disponibles }} / {{ horario.bloques_totales }}</button>
-                                    </div>
+                                {% if horario.fecha.weekday == forloop.counter0 %}
+                                    {% if horario.bloques_disponibles == horario.bloques_totales %}
+                                        <div>
+                                            <button class="disponibles">{{ horario.bloques_disponibles }} / {{ horario.bloques_totales }}</button>
+                                        </div>
+                                    {% elif horario.bloques_disponibles == 0 %}
+                                        <div>
+                                            <button class="no-disponibles">{{ horario.bloques_disponibles }} / {{ horario.bloques_totales }}</button>
+                                        </div>
+                                    {% else %}
+                                        <div>
+                                            <button class="parcialmente-disponibles">{{ horario.bloques_disponibles }} / {{ horario.bloques_totales }}</button>
+                                        </div>
+                                    {% endif %}
                                 {% else %}
                                     <div></div>
                                 {% endif %}
