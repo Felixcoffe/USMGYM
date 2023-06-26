@@ -10,19 +10,17 @@ class Usuario(models.Model):
         return self.nombre
 
 
-
 class Horario(models.Model):
-    id_horario = models.CharField(primary_key=True, max_length=36, default=uuid.uuid4, editable=False)
+    id_horario = models.AutoField(primary_key=True)
     fecha = models.DateField()
     hora_inicio = models.TimeField()
     hora_final = models.TimeField()
     estado = models.BooleanField(default=True)
-    bloques_totales = models.IntegerField(default=20)
-    bloques_disponibles = models.IntegerField(default=20)
+    bloques_totales = models.IntegerField()
+    bloques_disponibles = models.IntegerField()
 
     def __str__(self):
-        return self.id_horario
-
+        return str(self.id_horario)
 
     def restar_cupos(self, cantidad):
         self.bloques_totales -= cantidad
@@ -31,8 +29,6 @@ class Horario(models.Model):
 class Cupos(models.Model):
     id_cupo = models.AutoField(primary_key=True)
     horario = models.ForeignKey(Horario, on_delete=models.CASCADE)
-    hora = models.TimeField()
-    cupos_disponibles = models.IntegerField(default=0)
     estado = models.BooleanField(default=True)
     nombre = models.CharField(max_length=50)
     carrera = models.CharField(max_length=50)

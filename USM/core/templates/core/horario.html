@@ -1,6 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
-
+{% load custom_filters %}
 {% block content %}
 
 <!DOCTYPE html>
@@ -98,48 +98,23 @@
                 {% for dia in dias %}
                 <td>
                     {% if dia != 'Sábado' and dia != 'Domingo' %}
+
                     {% for horario in horarios %}
                     {% if horario.fecha.weekday == forloop.counter0 %}
                     {% if horario.bloques_disponibles == horario.bloques_totales %}
                     <div>
-                        <button class="disponibles" onclick="mostrarFormulario()">{{ horario.bloques_disponibles }} /
-                            {{horario.bloques_totales}}</button>
-                        <div id="popupForm" class="popup">
-                            <h2>Formulario UTFSM</h2>
-                            <form>
-                                <label for="rut">RUT:</label>
-                                <input type="text" id="rut" name="rut" required><br><br>
-
-                                <label for="nombre">Nombre:</label>
-                                <input type="text" id="nombre" name="nombre" required><br><br>
-
-                                <label for="carrera">Carrera:</label>
-                                <input type="text" id="carrera" name="carrera" required><br><br>
-
-                                <input type="submit" value="Enviar">
-                            </form>
-                        </div>
+                        <button class="disponibles" onclick="mostrarFormulario({{ horario.id_horario }})">{{horario.bloques_disponibles }} /{{ horario.bloques_totales }}</button>
                     </div>
                     {% elif horario.bloques_disponibles == 0 %}
                     <div>
-                        <button class="no-disponibles">{{ horario.bloques_disponibles }} /
-                            {{horario.bloques_totales}}</button>
+                        <button class="no-disponibles">{{ horario.bloques_disponibles }} / {{ horario.bloques_totales }}</button>
                     </div>
                     {% else %}
                     <div>
                         <button class="parcialmente-disponibles"
-                            onclick="mostrarFormulario()">{{horario.bloques_disponibles }} /
-                            {{horario.bloques_totales}}</button>
-                        <script>
-                            function mostrarFormulario() {
-                                var popup = document.getElementById("popupForm");
-                                popup.style.display = "block";
-                            }
-                        </script>
+                            onclick="mostrarFormulario({{ horario.id_horario }})">{{ horario.bloques_disponibles }}/{{ horario.bloques_totales }}</button>
                     </div>
                     {% endif %}
-                    {% else %}
-                    <div></div>
                     {% endif %}
                     {% endfor %}
                     {% endif %}
@@ -150,13 +125,34 @@
         </tbody>
     </table>
 
-</body>
-<script>
-    function mostrarFormulario() {
-        var popup = document.getElementById("popupForm");
-        popup.style.display = "block";
-    }
-</script>
+    <!-- ... -->
+
+    <div id="popupForm" class="popup">
+        <h2>Formulario UTFSM</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" id="horario_id" name="horario_id" value="">
+            <label for="rut">RUT:</label>
+            <input type="text" id="rut" name="rut" required><br><br>
+
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required><br><br>
+
+            <label for="carrera">Carrera:</label>
+            <input type="text" id="carrera" name="carrera" required><br><br>
+
+            <input type="submit" value="Enviar">
+        </form>
+    </div>
+
+    <script>
+        function mostrarFormulario(horarioId) {
+            var popup = document.getElementById("popupForm");
+            var horarioIdInput = document.getElementById("horario_id");
+            horarioIdInput.value = horarioId;
+            popup.style.display = "block";
+        }
+    </script>
 
 </html>
 
