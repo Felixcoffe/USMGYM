@@ -10,7 +10,7 @@ class Command(BaseCommand):
         fecha_actual = datetime.now().date()
 
         # Obtener el próximo día lunes
-        dia_lunes = fecha_actual + timedelta(days=(fecha_actual.weekday()))
+        dia_lunes = fecha_actual + timedelta(days=(fecha_actual.weekday()-7))
 
         # Generar registros de Horario para los próximos 7 días, omitiendo los domingos y sábados
         for i in range(7):
