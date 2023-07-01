@@ -1,14 +1,6 @@
 from django.db import models
 import uuid
 
-class Usuario(models.Model):
-    id_usuario = models.IntegerField(primary_key=True)
-    nombre = models.CharField(max_length=50)
-    tipo = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.nombre
-
 
 class Horario(models.Model):
     id_horario = models.AutoField(primary_key=True)
@@ -39,8 +31,6 @@ class Cupos(models.Model):
 
 
 class Cliente(models.Model):
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    rol_usm = models.CharField(max_length=50)
     rut = models.CharField(max_length=50)
     nombre = models.CharField(max_length=50)
     carrera = models.CharField(max_length=50)
