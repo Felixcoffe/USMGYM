@@ -10,6 +10,8 @@ class Horario(models.Model):
     estado = models.BooleanField(default=True)
     bloques_totales = models.IntegerField()
     bloques_disponibles = models.IntegerField()
+    dia = models.CharField(max_length=50, null=True)
+    bloques = models.IntegerField(null=True)
 
     def __str__(self):
         return str(self.id_horario)

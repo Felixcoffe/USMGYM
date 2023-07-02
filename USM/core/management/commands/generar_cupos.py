@@ -1,6 +1,12 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from django.core.management.base import BaseCommand
 from core.models import Horario
+
+from datetime import datetime, timedelta, date
+from django.core.management.base import BaseCommand
+from core.models import Horario, Cupos
+from django.utils import timezone
+
 
 class Command(BaseCommand):
     help = 'Genera automáticamente registros de Horario'
@@ -12,6 +18,9 @@ class Command(BaseCommand):
         # Obtener el próximo día lunes
         dia_lunes = fecha_actual + timedelta(days=(fecha_actual.weekday()-7))
 
+        # Nombres de los días en español
+        dias_semana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
+
         # Generar registros de Horario para los próximos 7 días, omitiendo los domingos y sábados
         for i in range(7):
             fecha = dia_lunes + timedelta(days=i)
@@ -20,8 +29,14 @@ class Command(BaseCommand):
             if fecha.weekday() in [6, 5]:
                 continue
 
+            # Obtener el nombre del día en español
+            nombre_dia = dias_semana[fecha.weekday()]
+
             # Generar registros de Horario para cada hora desde las 8 am hasta las 7 pm
             for hora in range(8, 20):
+                # Calcular el número de bloque correspondiente
+                num_bloque = hora - 7  # Rango: 1-12
+
                 hora_inicio = datetime(fecha.year, fecha.month, fecha.day, hora, 0)
                 hora_final = hora_inicio + timedelta(minutes=70)
 
@@ -37,7 +52,9 @@ class Command(BaseCommand):
                     hora_final=hora_final.time(),
                     estado=True,
                     bloques_totales=bloques_totales,
-                    bloques_disponibles=bloques_disponibles
+                    bloques_disponibles=bloques_disponibles,
+                    dia=nombre_dia,
+                    bloques=num_bloque
                 )
                 horario.save()
 

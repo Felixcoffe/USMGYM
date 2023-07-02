@@ -80,52 +80,70 @@
 
 <body>
     <h1>Horario</h1>
-    <h2>{{ dia_actual }}</h2>
-
-    <table>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Horario</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+                aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'admin:index' %}">Administración</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Bloques</th>
+                    {% for dia in dias %}
+                    <th scope="col">{{ dia }}</th>
+                    {% endfor %}
+                    </tr>
+            </thead>
         <thead>
-            <tr>
-                <th></th>
-                {% for dia in dias %}
-                <th>{{ dia }}</th>
-                {% endfor %}
-            </tr>
-        </thead>
         <tbody>
             {% for hora in horas %}
-            <tr>
-                <td>Bloque {{ hora }}</td>
-                {% for dia in dias %}
-                <td>
-                    {% if dia != 'Sábado' and dia != 'Domingo' %}
-
-                    {% for horario in horarios %}
-                    {% if horario.fecha.weekday == forloop.counter0 %}
-                    {% if horario.bloques_disponibles == horario.bloques_totales %}
-                    <div>
-                        <button class="disponibles" onclick="mostrarFormulario({{ horario.id_horario }})">{{horario.bloques_disponibles }} /{{ horario.bloques_totales }}</button>
-                    </div>
-                    {% elif horario.bloques_disponibles == 0 %}
-                    <div>
-                        <button class="no-disponibles">{{ horario.bloques_disponibles }} / {{ horario.bloques_totales }}</button>
-                    </div>
-                    {% else %}
-                    <div>
-                        <button class="parcialmente-disponibles"
-                            onclick="mostrarFormulario({{ horario.id_horario }})">{{ horario.bloques_disponibles }}/{{ horario.bloques_totales }}</button>
-                    </div>
-                    {% endif %}
-                    {% endif %}
+                <tr>
+                    <th scope="col">Bloque {{ hora}}</td>
+                    {% for dia in dias %}
+                        {% if dia != 'Sábado' and dia != 'Domingo' %}
+                            <td>
+                                {% for horario in horarios %}
+                                    {% if horario.dia == dia %}
+                                    {% if horario.bloques == hora %}
+                                        {% if horario.bloques_disponibles == horario.bloques_totales %}
+                                            <div>
+                                                <button class="disponibles" onclick="mostrarFormulario({{ horario.id_horario }})">{{ horario.bloques_disponibles }}/{{ horario.bloques_totales }}</button>
+                                            </div>
+                                        {% elif horario.bloques_disponibles == 0 %}
+                                            <div>
+                                                <button class="no-disponibles">
+                                                    {{ horario.bloques_disponibles }}/{{ horario.bloques_totales }}
+                                                </button>
+                                            </div>
+                                        {% else %}
+                                            <div>
+                                                <button class="parcialmente-disponibles" onclick="mostrarFormulario({{ horario.id_horario }})">
+                                                    {{ horario.bloques_disponibles }}/{{ horario.bloques_totales }}
+                                                </button>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                        {% endif %}
                     {% endfor %}
-                    {% endif %}
-                </td>
-                {% endfor %}
-            </tr>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
-
-    <!-- ... -->
+</body>
 
     <div id="popupForm" class="popup">
         <h2>Formulario UTFSM</h2>
