@@ -122,9 +122,7 @@
                                             </div>
                                         {% elif horario.bloques_disponibles == 0 %}
                                             <div>
-                                                <button class="no-disponibles">
-                                                    {{ horario.bloques_disponibles }}/{{ horario.bloques_totales }}
-                                                </button>
+                                                <button class="no-disponibles">{{ horario.bloques_disponibles }}/{{ horario.bloques_totales }}</button>
                                             </div>
                                         {% else %}
                                             <div>

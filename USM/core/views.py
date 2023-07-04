@@ -40,8 +40,7 @@ def horario(request):
         horas = [int(i) for i in range(1, 13)]
 
         # Obtén el inicio de la semana
-        inicio_semana = now - timedelta(days=dia_actual)
-
+        inicio_semana = now 
         # Obtén el final de la semana
         fin_semana = inicio_semana + timedelta(days=6)
 

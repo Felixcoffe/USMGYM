@@ -8,6 +8,7 @@ class cuposadmin(admin.ModelAdmin):
 class horarioadmin(admin.ModelAdmin):
     list_display = ("fecha","hora_inicio","hora_final","bloques_totales", "bloques_disponibles")
     search_fields =("fecha","hora_inicio","hora_final","bloques_totales", "bloques_disponibles")
+    list_filter = ("fecha","hora_inicio","hora_final","bloques_totales", "bloques_disponibles")
 class clienteadmin (admin.ModelAdmin):
     list_display= ("rut","nombre","carrera")
     list_filter = ("rut", "nombre","carrera")
