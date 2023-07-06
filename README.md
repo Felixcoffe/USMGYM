@@ -1,2 +1,0 @@
-# USMGYM
-Proyecto GYM USM
