@@ -1,0 +1,175 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .horario {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(11, 1fr);
+            grid-gap: 5px;
+            padding: 10px;
+            margin: 0 auto;
+            /* Centrar la tabla */
+        }
+
+        .horario div {
+            background-color: #f2f2f2;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .horario button {
+            padding: 10px;
+            /* Aumentar el tamaño de los botones */
+            font-size: 16px;
+            /* Aumentar el tamaño de la fuente de los botones */
+            transition: background-color 0.3s;
+            /* Transición suave para el cambio de color */
+        }
+
+        .disponibles {
+            background-color: rgb(122, 228, 122);
+            /* Color verde para bloques disponibles */
+        }
+
+        .no-disponibles {
+            background-color: rgb(241, 98, 98);
+            /* Color rojo para bloques no disponibles */
+        }
+
+        .parcialmente-disponibles {
+            background-color: rgb(244, 198, 82);
+            /* Color amarillo para bloques parcialmente disponibles */
+        }
+
+        .horario button:hover {
+            background-color: #ccc;
+            /* Color del botón al pasar el mouse encima */
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            width: 400px;
+            border: 1px solid black;
+            border-radius: 5px;
+        }
+
+        /* Estilos para el botón */
+        .button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Horario</h1>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Horario</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+                aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'admin:index' %}">Administración</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Bloques</th>
+                    {% for dia in dias %}
+                    <th scope="col">{{ dia }}</th>
+                    {% endfor %}
+                    </tr>
+            </thead>
+        <thead>
+        <tbody>
+            {% for hora in horas %}
+                <tr>
+                    <th scope="col">Bloque {{ hora}}</td>
+                    {% for dia in dias %}
+                        {% if dia != 'Sábado' and dia != 'Domingo' %}
+                            <td>
+                                {% for horario in horarios %}
+                                    {% if horario.dia == dia %}
+                                    {% if horario.bloques == hora %}
+                                        {% if horario.bloques_disponibles == horario.bloques_totales %}
+                                            <div>
+                                                <button class="disponibles" onclick="mostrarFormulario({{ horario.id_horario }})">{{ horario.bloques_disponibles }}/{{ horario.bloques_totales }}</button>
+                                            </div>
+                                        {% elif horario.bloques_disponibles == 0 %}
+                                            <div>
+                                                <button class="no-disponibles">{{ horario.bloques_disponibles }}/{{ horario.bloques_totales }}</button>
+                                            </div>
+                                        {% else %}
+                                            <div>
+                                                <button class="parcialmente-disponibles" onclick="mostrarFormulario({{ horario.id_horario }})">
+                                                    {{ horario.bloques_disponibles }}/{{ horario.bloques_totales }}
+                                                </button>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+
+    <div id="popupForm" class="popup">
+        <h2>Formulario UTFSM</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" id="horario_id" name="horario_id" value="">
+            <label for="rut">RUT:</label>
+            <input type="text" id="rut" name="rut" required><br><br>
+
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required><br><br>
+
+            <label for="carrera">Carrera:</label>
+            <input type="text" id="carrera" name="carrera" required><br><br>
+
+            <input type="submit" value="Enviar">
+        </form>
+    </div>
+
+    <script>
+        function mostrarFormulario(horarioId) {
+            var popup = document.getElementById("popupForm");
+            var horarioIdInput = document.getElementById("horario_id");
+            horarioIdInput.value = horarioId;
+            popup.style.display = "block";
+        }
+    </script>
+
+</html>
+
+{% endblock %}
